@@ -9,4 +9,4 @@ Access bookmarks from Walker. Uses `xdg-open` to open a bookmark in the default 
 - jq
 - sqlite
 
-<img width="362" height="399" alt="image" src="https://github.com/user-attachments/assets/9913efa7-1a2b-441f-a7b7-deb8ca0ee634" />
+<img width="362" height="399" alt="image" src="https://github.com/user-attachments/assets/d0ccb698-5c66-4154-bde8-978e087ee512" />
