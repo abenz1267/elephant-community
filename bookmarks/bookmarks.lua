@@ -1,6 +1,7 @@
 Name = "bookmarks"
 NamePretty = "Bookmarks"
-HideFromProviderlist = true -- Change to false to have the menu appear in the Provider List
+Icon = ""
+HideFromProviderlist = false
 Cache = false
 Action = "xdg-open '%VALUE%'"
 
@@ -44,12 +45,30 @@ local function get_firefox_browser_name(profile_name)
 end
 
 local function trim(s)
-	if not s then
+	if type(s) ~= "string" then
 		return ""
 	end
 	return s:match("^%s*(.-)%s*$")
 end
 
+local function is_jq_installed()
+	local handle = io.popen("which jq 2>/dev/null")
+	if handle then
+		local result = handle:read("*a")
+		handle:close()
+		return result ~= ""
+	end
+	return false
+end
+local function is_sqlite3_installed()
+	local handle = io.popen("which sqlite3 2>/dev/null")
+	if handle then
+		local result = handle:read("*a")
+		handle:close()
+		return result ~= ""
+	end
+	return false
+end
 local function normalize_url(url)
 	if not url then
 		return ""
@@ -151,13 +170,34 @@ end
 
 function GetEntries()
 	local all_bookmarks = {}
+	local entries = {}
+
+	local jq_installed = is_jq_installed()
+	local sqlite3_installed = is_sqlite3_installed()
+
+	if not jq_installed then
+		table.insert(entries, {
+			Text = "Install jq for Chromium bookmarks",
+			Subtext = "jq is required to read Chromium-based browser bookmarks.",
+			Value = "",
+		})
+	end
+
+	if not sqlite3_installed then
+		table.insert(entries, {
+			Text = "Install sqlite3 for Firefox bookmarks",
+			Subtext = "sqlite3 is required to read Firefox-based browser bookmarks.",
+			Value = "",
+		})
+	end
+
 	local browsers = discover_browsers()
 
 	for _, browser in ipairs(browsers) do
 		local bookmarks
-		if browser.type == "chromium" then
+		if browser.type == "chromium" and jq_installed then
 			bookmarks = read_chromium_bookmarks(browser.path, browser.name)
-		elseif browser.type == "firefox" then
+		elseif browser.type == "firefox" and sqlite3_installed then
 			bookmarks = read_firefox_bookmarks(browser.path, browser.name)
 		end
 
@@ -168,7 +208,6 @@ function GetEntries()
 		end
 	end
 
-	local entries = {}
 	for _, bookmark in pairs(all_bookmarks) do
 		table.insert(entries, {
 			Text = bookmark.title,
@@ -185,7 +224,6 @@ function GetEntries()
 	if #entries == 0 then
 		table.insert(entries, {
 			Text = "No bookmarks found",
-			Subtext = "Install jq and sqlite3 for browser sync",
 			Value = "",
 		})
 	end
