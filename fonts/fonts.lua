@@ -1,5 +1,6 @@
 Name = "fonts"
 NamePretty = "Fonts"
+Icon = "font-select"
 HideFromProviderlist = false
 Cache = false
 function GetEntries()
