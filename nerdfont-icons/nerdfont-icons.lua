@@ -1,5 +1,6 @@
 Name = "nerdfont"
 NamePretty = "Nerd Font Icons"
+Cache = true
 
 local cache_dir = os.getenv("XDG_CACHE_HOME") or (os.getenv("HOME") .. "/.cache")
 local cache_file = cache_dir .. "/nerdfont/icons.txt"
