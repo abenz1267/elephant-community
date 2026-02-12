@@ -24,6 +24,11 @@ function GetEntries()
         Value = "niri msg action set-dynamic-cast-monitor",
     })
 
+    table.insert(entries, {
+        Text = "Clear Target",
+        Value = "niri msg action clear-dynamic-cast-target",
+    })
+
     for _, window in ipairs(data) do
         table.insert(entries, {
             Text = window.title,
