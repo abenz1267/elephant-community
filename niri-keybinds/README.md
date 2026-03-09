@@ -5,7 +5,7 @@
 - Copy `keybinds.lua` to `~/.config/elephant/menus/keybinds.lua`
 
 If you want it to be displayed in 2 columns (recommended), add this to
-`.config/walker/config.toml`:
+`~/.config/walker/config.toml`:
 
 ```ini
 [columns]
